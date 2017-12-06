@@ -1,6 +1,7 @@
 <template>
+<div class="root-wrapper">
 	<div class="shopcart">
-		<div class="content">
+		<div class="content" @click="toggleList">
 			<div class="content-left">
 				<div class="logo-wrapper">
 					<div class="logo " :class="{'highlight': totalCount > 0}">
@@ -11,21 +12,57 @@
 				<div class="price" :class="{'highlight': totalCount > 0}">¥{{totalPrice}}</div>
 				<div class="desc">另需配送费¥{{deliveryPrice}}元</div>
 			</div>
-			<div class="content-right">
-				<div class="pay">
-					¥{{minPrice}}元起送
+			<div class="content-right" @click.stop.prevent="pay">
+				<div class="pay" :class="payClass">
+					{{payDesc}}
 				</div>
 			</div>
 		</div>
+		<transition name="fold">
+			<div class="shopcart-list" v-show="fold">
+				<div class="list-header">
+					<h1 class="title">购物车</h1>
+					<span class="empty" @click="empty">清空</span>
+				</div>
+				<div class="list-content" ref="listContent">
+					<ul>
+						<li class="food" v-for="food in selectFoods">
+							<span class="name">{{food.name}}</span>
+							<div class="price">
+								<span>¥{{food.price*food.count}}</span>
+							</div>
+							<div class="cartcontrol-wrapper">
+								<cartcontrol :food="food"></cartcontrol>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</transition>
 	</div>
+	<div class="list-mask" v-show="fold" @click="hideList"></div>
+</div>
 </template>
 <script>
+	import BScroll from 'better-scroll'
+	import cartcontrol from 'components/cartcontrol/cartcontrol'
 	export default {
+		components: {
+			cartcontrol
+		},
+		data() {
+			return {
+				fold: false
+			}
+		},
 		props: {
 			selectFoods: {
 				type: Array,
 				default() {
-					return []
+					return [{
+						price: 10,
+						count: 1
+					}]
 				}
 			},
 			deliveryPrice: {
@@ -41,16 +78,61 @@
 			totalPrice() {
 				let total = 0
 				this.selectFoods.forEach((food) => {
-					total = food.price * food.count
+					total += food.price * food.count
 				})
 				return total
 			},
 			totalCount() {
 				let count = 0
 				this.selectFoods.forEach((food) => {
-					count = food.count
+					count += food.count
 				})
 				return count
+			},
+			payDesc () {
+				if (this.totalPrice === 0) {
+					return '¥' + this.minPrice + '元起送'
+				} else if (this.totalPrice < this.minPrice) {
+					return '还差¥' + (this.minPrice - this.totalPrice) + '元起送'
+				} else {
+					return '去结算'
+				}
+			},
+			payClass() {
+				if (this.totalPrice !== 0 && this.totalPrice < this.minPrice) {
+					return 'not-enough'
+				} else if (this.totalPrice >= this.minPrice) {
+					return 'enough'
+				}
+			}
+		},
+		methods: {
+			toggleList() {
+				if (this.totalCount === 0) {
+					return
+				} else {
+					this.fold = !this.fold
+				}
+				this.$nextTick(() => {
+					this.scroll = new BScroll(this.$refs.listContent, {
+						click: true
+					})
+				})
+			},
+			empty() {
+				this.selectFoods.forEach((food) => {
+					food.count = 0
+				})
+				this.fold = !this.fold
+			},
+			hideList() {
+				this.fold = !this.fold
+			},
+			pay() {
+				if (this.totalPrice < this.minPrice) {
+					return
+				}
+				window.alert('支付' + this.totalPrice + '元')
 			}
 		}
 	}
@@ -140,4 +222,70 @@
 					font-size 12px
 					font-weight 700
 					background #2b333b
+					&.not-enough
+						background #2b333b
+					&.enough
+						background #00b43c
+						color #fff
+.shopcart-list
+	position absolute
+	left  0
+	top 0
+	z-index -1
+	width 100%
+	transform translate3d(0,-100%,0)
+	&.fold-enter-active
+		transition all .5s ease
+	&.fold-leave-active
+		transition all 1s ease
+	&.fold-enter,&.fold-leave-to
+		transform translate3d(0,0,0)
+	.list-header
+		height 40px
+		line-height 40px
+		padding 0 18px
+		background #f3f5f7
+		border-bottom 1px solid rgba(7,17,27,.1)
+		.title 
+			float left 
+			font-size  14px
+			color rgb(7,17,27)
+		.empty
+			float right 
+			font-size  12px
+			color rgb(0,160,260)
+	.list-content
+		padding 0 18px
+		max-height 217px
+		overflow hidden
+		background #fff
+		.food
+			position relative
+			padding 12px 0
+			box-sizing border-box
+			border-1px(rgba(7,17,27,.1))
+			.name
+				line-height 24px
+				font-size 14px
+				color rgb(7,17,27)
+			.price
+				position absolute
+				right 90px
+				bottom 12px
+				line-height 24px
+				font-weight 700
+				font-size 14px
+				color rgb(240,20,20)
+			.cartcontrol-wrapper
+				position absolute
+				bottom 6px
+				right 0
+.list-mask
+	position fixed
+	left 0
+	top 0
+	width 100%
+	height 100%		
+	z-index 40
+	background rgba(0,0,0,.3)		
 </style>

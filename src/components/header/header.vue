@@ -18,7 +18,7 @@
      </div>
      <div v-if="seller.supports" class="support-count" @click="showDetail">
        <span class="count">{{seller.supports.length}}个</span>
-        <i class="iconfont icon icon-dui">></i>
+        <i class="icon icon-keyboard_arrow_right">></i>
      </div>
    </div>
    <div class="bulletin-wrapper">
@@ -55,7 +55,7 @@
          </div>
        </div>
        <div class="detail-close" @click="showDetail">
-         <i class="iconfont icon-guanbi icon"></i>
+         <i class="icon-close">*</i>
        </div> 
 
      </div>
@@ -223,7 +223,6 @@ export default {
        transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0)  
     &.fade-enter, &.fade-leave-to
       opacity 0
-      background rgba(7,17,27,0)
     .detail-wrapper
       min-height 100%
       width 100%
