@@ -2,11 +2,11 @@
 	<div class="cartcontrol">
 	   <transition name="roll">
 		<div class="cart-decrease" v-show='food.count' @click.stop.prevent='decreaseCart'>
-		<span class="inner">-</span>
+			<span class="inner iconfont icon-jian"></span>
 		</div>
-		</transition>
+	   </transition>
 		<div class="cart-count" v-show='food.count > 0'>{{food.count}}</div>
-		<div class="cart-add" @click.stop.prevent='addCart'>+</div>
+		<div class="cart-add icon iconfont icon-jia" @click.stop.prevent='addCart'></div>
 	</div>
 </template>
 <script>
@@ -51,20 +51,14 @@
 		font-size 0
 		.cart-decrease	
 			display inline-block
+			padding  4px 6px 6px 6px
 			transform translate3D(0,0,0)
-			.inner			
+			.inner
 				display inline-block
-				padding 6px
-				font-size 24px
 				line-height 24px
-				border 1px solid #00a0dc
-				border-radius 50%
-				width	14px
-				height 14px
-				line-height 14px
-				text-align center
-				color #00a0dc			
-				transform rotate(0)
+				font-size 24px
+				vertical-align top
+				color #00a0dc
 			&.roll-leave-to,&.roll-enter
 				opacity  0
 				transform translate3D(50px,0,0)
@@ -78,24 +72,26 @@
 					transition all .4s ease
 		.cart-count
 			display inline-block
-			font-size 12px
+			font-size 10px
 			vertical-align top
 			width 12px
-			padding 0px 5px 0
+			padding 6px 0 0
 			line-height 24px
 			text-align center 
 		.cart-add
 			display inline-block
 			padding 6px
-			font-size 24px
 			line-height 24px
-			border 1px solid #00a0dc
-			border-radius 50%
-			width	14px
-			height 14px
-			text-align center
-			line-height 14px
+			font-size 24px
+			vertical-align top
 			color #00a0dc
-			
-		
+	
+.cartControl .cart-decrease .inner, 
+.cartControl .cart-add .inner {
+    display inline-block
+    line-height 24px
+    font-size 24px
+    vertical-align top
+    color #00a0dc
+}
 </style>

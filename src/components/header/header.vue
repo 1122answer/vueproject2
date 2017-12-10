@@ -18,12 +18,12 @@
      </div>
      <div v-if="seller.supports" class="support-count" @click="showDetail">
        <span class="count">{{seller.supports.length}}个</span>
-        <i class="icon icon-keyboard_arrow_right">></i>
+        <i class="icon iconfont icon-zuoyoujiantou"></i>
      </div>
    </div>
    <div class="bulletin-wrapper">
      <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
-     <i class="icon-keyboard_arrow_right"></i>
+     <i class="icon iconfont icon-zuoyoujiantou"></i>
    </div>
    <div class="background">
        <img :src="seller.avatar" alt="" width="100%" height="100%"> 
@@ -55,7 +55,7 @@
          </div>
        </div>
        <div class="detail-close" @click="showDetail">
-         <i class="icon-close">*</i>
+         <i class="iconfont icon-cha"></i>
        </div> 
 
      </div>
@@ -194,11 +194,11 @@ export default {
       font-size 10px
       font-weight 200
       margin 0 4px
-    .icon-keyboard_arrow_right
-      position absolute
-      font-size 10px
-      right 12px
-      top 8px
+    .icon-zuoyoujiantou
+      position: absolute;
+      font-size: 18px;
+      right: 6px;
+      top: 1px;
   .background
     position absolute
     width 100%
