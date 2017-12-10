@@ -1,6 +1,6 @@
 # 仿饿了么webapp
 
-![alt text](/static/show.gif)
+![](/static/show.gif)
 ####主要实现的功能：
 
 * 商品滚动,商品滚轮滚动
